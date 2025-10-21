@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7vnk6hkhkfud"]
+
+[sub_resource type="GDScript" id="GDScript_xwmmn"]
+resource_name = "Teleporter"
+script/source = "extends Ability
+
+var TeleporterObject := preload(\"res://Player/abilities/teleporter/TeleporterObject.tscn\")
+var TeleporterExists := false
+var Player :CharacterBody2D
+var Teleporter :Node2D
+
+
+
+func ActPress():
+	Player = get_parent().get_parent()
+	var TeleporterPath := get_parent().get_parent().get_parent()
+	var TeleporterInstance := TeleporterObject.instantiate()
+	
+	if not TeleporterExists:
+		TeleporterPath.add_child(TeleporterInstance, false, Node.INTERNAL_MODE_FRONT)
+		Teleporter = TeleporterPath.get_node(\"TeleporterObject\")
+		Teleporter.position = Player.position
+		
+	elif is_instance_valid(TeleporterObject):
+		Player.position = Teleporter.position
+		Teleporter.queue_free()
+	
+	TeleporterExists = !TeleporterExists
+"
+
+[node name="Teleporter" type="Node"]
+script = SubResource("GDScript_xwmmn")

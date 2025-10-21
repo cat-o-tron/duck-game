@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://bitrh3alrrfd5"]
+
+[sub_resource type="GDScript" id="GDScript_3qydi"]
+resource_name = "UserMove"
+script/source = "class_name UserMove
+extends Node
+
+var dir :Vector2
+
+@export var locked:bool=false
+@export var MaxSpeed:float
+@export_range(0,1) var Accel:float
+@export_range(0,1) var Deccel:float
+
+
+func dirManage():
+	dir = Vector2(Input.get_axis(\"Left\",\"Right\"), Input.get_axis(\"Up\",\"Down\")).normalized()
+
+
+func _physics_process(_delta: float) -> void:
+	
+	dirManage()
+	
+	dir = dir.normalized()
+	
+	if not locked:
+		if dir.x:
+			get_parent().velocity.x = move_toward(get_parent().velocity.x, MaxSpeed*dir.x, Accel*MaxSpeed)
+		else:
+			get_parent().velocity.x = move_toward(get_parent().velocity.x, 0, Deccel*MaxSpeed)
+		
+		if dir.y:
+			get_parent().velocity.y = move_toward(get_parent().velocity.y, MaxSpeed*dir.y, Accel*MaxSpeed)
+		else:
+			get_parent().velocity.y = move_toward(get_parent().velocity.y, 0, Deccel*MaxSpeed)
+	
+	get_parent().move_and_slide()
+"
+
+[node name="UserMove" type="Node"]
+script = SubResource("GDScript_3qydi")
+MaxSpeed = 500.0
+Accel = 1.0
+Deccel = 1.0

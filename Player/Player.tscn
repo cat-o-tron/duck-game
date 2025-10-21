@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://wo2b3ufobfxi"]
+
+[ext_resource type="Texture2D" uid="uid://b4fvvrriqiir6" path="res://icon.svg" id="1_xhfnw"]
+[ext_resource type="PackedScene" uid="uid://bitrh3alrrfd5" path="res://Player/UserMove.tscn" id="2_q3lat"]
+[ext_resource type="PackedScene" uid="uid://b7vnk6hkhkfud" path="res://Player/abilities/teleporter/TeleporterAbility.tscn" id="3_tok1r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xhfnw"]
+size = Vector2(80, 80)
+
+[sub_resource type="GDScript" id="GDScript_tok1r"]
+resource_name = "AbilitiesManager"
+script/source = "extends Node
+
+
+#doesn't work: \"Action\",n
+
+var timeHeld:float
+
+func _physics_process(delta: float) -> void:
+	for n in get_child_count():
+		if Input.is_action_just_pressed(str(\"Action\",n+1)):
+			get_child(n).emit_signal(\"actPress\")       #press
+		
+		if Input.is_action_just_released(str(\"Action\",n+1)):
+			
+			get_child(n).emit_signal(\"actRelease\")     #release
+		
+		if Input.is_action_pressed(str(\"Action\",n+1)):
+			
+			get_child(n).emit_signal(\"actHold\",timeHeld)        #hold
+			timeHeld+=delta
+		elif timeHeld > 0:
+			timeHeld = 0
+"
+
+[node name="Player" type="CharacterBody2D"]
+y_sort_enabled = true
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.625, 0.625)
+texture = ExtResource("1_xhfnw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_xhfnw")
+
+[node name="UserMove" parent="." instance=ExtResource("2_q3lat")]
+
+[node name="Abilities" type="Node" parent="."]
+script = SubResource("GDScript_tok1r")
+
+[node name="Teleporter" parent="Abilities" instance=ExtResource("3_tok1r")]
