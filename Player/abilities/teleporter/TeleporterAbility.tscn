@@ -6,7 +6,6 @@ script/source = "extends Ability
 
 var TeleporterObject := preload(\"res://Player/abilities/teleporter/TeleporterObject.tscn\")
 var TeleporterExists := false
-var Player :CharacterBody2D
 var Teleporter :Node2D
 
 

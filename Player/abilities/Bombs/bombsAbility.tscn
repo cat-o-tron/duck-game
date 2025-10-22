@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://1riko5ljpr6r"]
+
+[sub_resource type="GDScript" id="GDScript_ddoul"]
+resource_name = "Bombs"
+script/source = "extends Ability
+
+@export var cooldown = 0.3
+
+@onready var timer := $Timer
+
+func ActHold(_timeHeld:float):
+	if timer.time_left == 0:
+		timer.wait_time = cooldown
+		timer.start()
+		CreateBomb()
+
+func CreateBomb():
+	var BombInstance :Node2D = BombScene.instantiate()
+	Player.add_child(BombInstance)
+	BombInstance.reparent(Player.get_parent())
+"
+
+[node name="Bombs" type="Node"]
+script = SubResource("GDScript_ddoul")
+metadata/_custom_type_script = "uid://3hj1hn1trh5b"
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true

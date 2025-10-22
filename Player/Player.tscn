@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://wo2b3ufobfxi"]
+[gd_scene load_steps=8 format=3 uid="uid://wo2b3ufobfxi"]
 
 [ext_resource type="Texture2D" uid="uid://b4fvvrriqiir6" path="res://icon.svg" id="1_xhfnw"]
 [ext_resource type="PackedScene" uid="uid://bitrh3alrrfd5" path="res://Player/UserMove.tscn" id="2_q3lat"]
 [ext_resource type="PackedScene" uid="uid://b7vnk6hkhkfud" path="res://Player/abilities/teleporter/TeleporterAbility.tscn" id="3_tok1r"]
+[ext_resource type="PackedScene" uid="uid://1riko5ljpr6r" path="res://Player/abilities/Bombs/bombsAbility.tscn" id="4_ddoul"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xhfnw"]
 size = Vector2(80, 80)
@@ -33,6 +34,9 @@ func _physics_process(delta: float) -> void:
 			timeHeld = 0
 "
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_ddoul"]
+radius = 32.0
+
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
 
@@ -50,3 +54,12 @@ shape = SubResource("RectangleShape2D_xhfnw")
 script = SubResource("GDScript_tok1r")
 
 [node name="Teleporter" parent="Abilities" instance=ExtResource("3_tok1r")]
+
+[node name="Bombs" parent="Abilities" instance=ExtResource("4_ddoul")]
+cooldown = 0.1
+
+[node name="HurtCircle" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtCircle"]
+shape = SubResource("CircleShape2D_ddoul")
+debug_color = Color(0.9999997, 0.0037328284, 0.089695714, 0.41960785)

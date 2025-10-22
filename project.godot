@@ -18,6 +18,10 @@ config/icon="res://icon.svg"
 
 window/stretch/mode="viewport"
 
+[global_group]
+
+"Damage Area"="If the player enters this area they will take damage"
+
 [input]
 
 Up={
