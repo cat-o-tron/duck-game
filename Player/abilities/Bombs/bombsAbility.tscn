@@ -15,6 +15,7 @@ func ActHold(_timeHeld:float):
 		CreateBomb()
 
 func CreateBomb():
+	var BombScene :PackedScene = preload(\"res://Player/abilities/Bombs/BombObject.tscn\")
 	var BombInstance :Node2D = BombScene.instantiate()
 	Player.add_child(BombInstance)
 	BombInstance.reparent(Player.get_parent())
