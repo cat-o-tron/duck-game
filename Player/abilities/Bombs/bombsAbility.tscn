@@ -23,6 +23,7 @@ func CreateBomb():
 
 [node name="Bombs" type="Node"]
 script = SubResource("GDScript_ddoul")
+cooldown = 0.4
 metadata/_custom_type_script = "uid://3hj1hn1trh5b"
 
 [node name="Timer" type="Timer" parent="."]

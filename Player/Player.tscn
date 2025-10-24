@@ -1,12 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://wo2b3ufobfxi"]
+[gd_scene load_steps=12 format=3 uid="uid://wo2b3ufobfxi"]
 
-[ext_resource type="Texture2D" uid="uid://b4fvvrriqiir6" path="res://icon.svg" id="1_xhfnw"]
+[ext_resource type="Texture2D" uid="uid://dmoc4fxdoh6sm" path="res://sprites/entities.png" id="1_ddoul"]
 [ext_resource type="PackedScene" uid="uid://bitrh3alrrfd5" path="res://Player/UserMove.tscn" id="2_q3lat"]
 [ext_resource type="PackedScene" uid="uid://b7vnk6hkhkfud" path="res://Player/abilities/teleporter/TeleporterAbility.tscn" id="3_tok1r"]
 [ext_resource type="PackedScene" uid="uid://1riko5ljpr6r" path="res://Player/abilities/Bombs/bombsAbility.tscn" id="4_ddoul"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xhfnw"]
-size = Vector2(80, 80)
+size = Vector2(11, 9)
 
 [sub_resource type="GDScript" id="GDScript_tok1r"]
 resource_name = "AbilitiesManager"
@@ -34,21 +34,58 @@ func _physics_process(delta: float) -> void:
 			timeHeld = 0
 "
 
+[sub_resource type="GDScript" id="GDScript_ddoul"]
+resource_name = "HurtArea"
+script/source = "extends Area2D
+
+
+signal Hit(By:Area2D)
+
+func _ready() -> void:
+	connect(\"area_entered\", area_entered)
+	connect(\"Hit\", hit)
+
+func area_entered(area:Area2D):
+	if area.is_in_group(\"Damage Area\"):
+		Hit.emit(area)
+
+
+func hit(By:Area2D):
+	By=By
+	print(\" ouch\")
+"
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_ddoul"]
-radius = 32.0
+radius = 3.1622777
+
+[sub_resource type="Animation" id="Animation_8g4oa"]
+resource_name = "idle"
+
+[sub_resource type="Animation" id="Animation_6ysni"]
+resource_name = "walk"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vlldt"]
+_data = {
+&"idle": SubResource("Animation_8g4oa"),
+&"walk": SubResource("Animation_6ysni")
+}
 
 [node name="Player" type="CharacterBody2D"]
-y_sort_enabled = true
 
 [node name="Icon" type="Sprite2D" parent="."]
-scale = Vector2(0.625, 0.625)
-texture = ExtResource("1_xhfnw")
+texture = ExtResource("1_ddoul")
+hframes = 2
+vframes = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.49999997, 0.49999997)
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("RectangleShape2D_xhfnw")
 
 [node name="UserMove" parent="." instance=ExtResource("2_q3lat")]
+MaxSpeed = 100.0
+Accel = 0.7
+Deccel = 0.8
 
 [node name="Abilities" type="Node" parent="."]
 script = SubResource("GDScript_tok1r")
@@ -59,7 +96,13 @@ script = SubResource("GDScript_tok1r")
 cooldown = 0.1
 
 [node name="HurtCircle" type="Area2D" parent="."]
+script = SubResource("GDScript_ddoul")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtCircle"]
 shape = SubResource("CircleShape2D_ddoul")
 debug_color = Color(0.9999997, 0.0037328284, 0.089695714, 0.41960785)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_vlldt")
+}
