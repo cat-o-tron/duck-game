@@ -207,6 +207,7 @@ one_shot = true
 autostart = true
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(0, 2)
 emitting = false
 amount = 60
 lifetime = 0.3
@@ -220,6 +221,8 @@ process_material = SubResource("ParticleProcessMaterial_34iut")
 script = SubResource("GDScript_o67tb")
 
 [node name="Area2D" type="Area2D" parent="." groups=["Damage Area"]]
+position = Vector2(0, 2)
+metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_j10rs")
